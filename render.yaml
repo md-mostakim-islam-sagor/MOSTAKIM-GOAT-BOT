@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: mostakim-goat-bot
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install --legacy-peer-deps
+    startCommand: node index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "20.18.0"

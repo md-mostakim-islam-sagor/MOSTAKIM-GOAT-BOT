@@ -1,0 +1,98 @@
+<%~ includeFile("partials/header.eta", {
+	user: user
+}) %>
+<%~ includeFile("partials/message.eta") %>
+<%~ includeFile("partials/title.eta", {
+	icon: "fas fa-home",
+	title: "Home"
+}); %>
+
+<h1 class="text-center mt-3">Welcome to MOSTAKIM GOAT BOT!</h1>
+
+<ul class="text-center d-block list-unstyled">
+	<li> <i class="fas fa-user-shield"></i> Moderation</li>
+	<li> <i class="fas fa-terminal"></i> Custom commands</li>
+</ul>
+
+<div class="text-center mb-3">
+<% if (global.botID) { %>
+	<button class="btn btn-phoenix-primary btn-block rounded-5" id="addme">
+		Add bot to your group chat
+	</button>
+<% } else { %>
+	<button class="btn btn-phoenix-danger btn-block rounded-5">
+		Bot is currently offline
+	</button>
+<% } %>
+</div>
+
+<hr>
+
+<section id="about" class="py-5" onclick="window.location.href='/dashboard'" style="cursor: pointer;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<h2 class="text-center mb-4">Easy to Use</h2>
+				<p class="text-center">Here you can customize welcome messages for new members, farewell messages for members who leave, and much more — with the most intuitive and user-friendly dashboard!</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="rent-api" class="bg-light py-5" onclick="window.location.href='/dashboard'" style="cursor: pointer;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<h2 class="text-center mb-4">Send Welcome Messages to New Group Members</h2>
+				<p class="text-center">Use welcome messages to inform newcomers about group rules or ongoing events. You can design your own welcome card or keep it simple.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="contact" class="py-5" onclick="window.location.href='/dashboard'" style="cursor: pointer;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<h2 class="text-center mb-4">Easily Create Your Own Custom Commands</h2>
+				<p class="text-center">MOSTAKIM GOAT BOT gives you full control to create your own commands.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="thanks" class="bg-light py-5" onclick="window.location.href='/dashboard'" style="cursor: pointer;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<h2 class="text-center mb-4">Levels & EXP in Your Group Chat</h2>
+				<p class="text-center">Use our system to identify and reward the most active members in your group chat.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="users" class="py-5" onclick="window.location.href='/dashboard'" style="cursor: pointer;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<h2 class="text-center mb-4">Users</h2>
+				<p class="text-center">The bot has been added to a total of <b><%=global.db.allThreadData.length%> group chats</b> and is used by <b><%=global.db.allUserData.length%> users</b>.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<script type="text/javascript">
+  (function() {
+    const btn = $('#addme');
+		if (btn.length > 0) {
+			btn.on("click", () => {
+				window.open("https://www.facebook.com/" + "<%= global.botID %>", "_blank");
+			});
+		}
+  })();
+</script>
+
+<%~ includeFile('partials/footer.eta') %>

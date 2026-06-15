@@ -1,0 +1,2 @@
+- [GoatBot onFirstChat fix](goatbot-onfirstchat.md) — onFirstChat is a Set in mostakim.js; use ._commandNames array on the Set, not .push() directly
+- [Dashboard register/forgotPassword](dashboard-auth-fix.md) — register/forgotPassword routes had undefined transporter/validateEmail; now self-contained with no email dep

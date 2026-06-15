@@ -1,0 +1,141 @@
+<%~ includeFile("partials/header.eta", {
+        user: user
+}); %>
+<%~ includeFile("partials/message.eta"); %>
+<%~ includeFile("partials/title.eta", {
+        icon: "fa-solid fa-user-plus",
+        title: "Register"
+}); %>
+
+<section class="post my-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-lg-5 col-xl-4 mx-auto">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="text-center">Create Account</h4>
+          </div>
+          <div class="card-body">
+            <form id="registerForm">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" readonly onfocus="this.removeAttribute('readonly');">
+              </div>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+              </div>
+              <div class="form-group">
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password">
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-phoenix-primary btn-block mt-4" id="register">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+  (function() {
+    const email = $("#email");
+    const name = $("#name");
+    const password = $("#password");
+    const password_confirmation = $("#password_confirmation");
+
+    email.on("keypress keyup keydown", checkValidEmail);
+    name.on("keypress keyup keydown", checkValidName);
+    password.on("keypress keyup keydown", checkValidPass);
+    password_confirmation.on("keypress keyup keydown", checkValidPassConfirm);
+
+    $("#register").on("click", async function(e) {
+      e.preventDefault();
+      if (document.querySelector(".is-invalid")) {
+        $.createToast({ type: "error", message: "Please fix the errors in the form" });
+      } else {
+        const register = this;
+        register.disabled = true;
+        register.innerHTML = "<span class='spinner-border spinner-border-sm'></span> Registering...";
+
+        $.ajax({
+          url: "/register",
+          type: "POST",
+          data: {
+            email: email.val(),
+            name: name.val(),
+            password: password.val(),
+            password_confirmation: password_confirmation.val()
+          },
+          success: function(data) {
+            window.location.href = data.redirectLink || "/";
+          },
+          error: function(data) {
+            register.disabled = false;
+            register.innerHTML = "Register";
+            if (data.responseJSON && data.responseJSON.errors) {
+              data.responseJSON.errors.forEach(function(error) {
+                $.createToast({ type: "error", message: error.msg });
+              });
+            } else {
+              $.createToast({ type: "error", message: "Registration failed, please try again" });
+            }
+          }
+        });
+      }
+    });
+
+    function checkValidEmail() {
+      if (email.val().length > 100 || email.val().length < 5) {
+        email.addClass("is-invalid");
+        if (!email.parent().find(".invalid-feedback").length)
+          email.parent().append('<div class="invalid-feedback">Email must be between 5 and 100 characters</div>');
+      } else {
+        email.removeClass("is-invalid");
+        email.parent().find(".invalid-feedback").remove();
+      }
+    }
+
+    function checkValidName() {
+      if (name.val().length > 30 || name.val().length < 3) {
+        name.addClass("is-invalid");
+        if (!name.parent().find(".invalid-feedback").length)
+          name.parent().append('<div class="invalid-feedback">Name must be between 3 and 30 characters</div>');
+      } else {
+        name.removeClass("is-invalid");
+        name.parent().find(".invalid-feedback").remove();
+      }
+    }
+
+    function checkValidPass() {
+      if (password.val().length < 6) {
+        password.addClass("is-invalid");
+        if (!password.parent().find(".invalid-feedback").length)
+          password.parent().append('<div class="invalid-feedback">Password must be at least 6 characters</div>');
+      } else {
+        password.removeClass("is-invalid");
+        password.parent().find(".invalid-feedback").remove();
+      }
+    }
+
+    function checkValidPassConfirm() {
+      if (password_confirmation.val() != password.val() || password_confirmation.val().length < 6) {
+        password_confirmation.addClass("is-invalid");
+        if (!password_confirmation.parent().find(".invalid-feedback").length)
+          password_confirmation.parent().append('<div class="invalid-feedback">Password confirmation must match password</div>');
+      } else {
+        password_confirmation.removeClass("is-invalid");
+        password_confirmation.parent().find(".invalid-feedback").remove();
+      }
+    }
+  })();
+</script>
+
+<%~ includeFile("partials/footer.eta") %>
